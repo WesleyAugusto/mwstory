@@ -1,9 +1,7 @@
 package br.com.mwstory.model
 
-import org.bson.types.ObjectId
-
 data class Product(
-    val _id: ObjectId?,
+    val id: String?,
     val name: String,
     val price: Double,
     val quantity: Int,

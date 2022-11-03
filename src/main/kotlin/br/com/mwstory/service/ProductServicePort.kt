@@ -4,5 +4,6 @@ import br.com.mwstory.model.Product
 import br.com.mwstory.model.ProductEntity
 
 interface ProductServicePort {
+    fun getAllProducts(): List<ProductEntity>
     fun postProduct(requestProduct: Product): ProductEntity
 }

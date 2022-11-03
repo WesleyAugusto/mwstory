@@ -1,10 +1,15 @@
 package br.com.mwstory.model
 
+import br.com.mwstory.annotations.NoArg
+import io.micronaut.core.annotation.Introspected
+
+@Introspected
+@NoArg
 data class ProductEntity(
-    var _id: String?,
-    val name: String,
-    val price: Double,
-    val quantity: Int,
-    val inventory: Int,
-    val category: Category
+    var id: String?,
+    var name: String,
+    var price: Double,
+    var quantity: Int,
+    var inventory: Int,
+    var category: Category
 )

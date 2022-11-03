@@ -7,9 +7,13 @@ import jakarta.inject.Singleton
 
 @Singleton
 class ProductService(private val productRepositoryPort: ProductRepositoryPort) : ProductServicePort {
+    override fun getAllProducts(): List<ProductEntity> {
+        return productRepositoryPort.findAllProductsRepository()
+    }
+
     override fun postProduct(requestProduct: Product): ProductEntity {
         val productEntity = ProductEntity(
-            requestProduct._id.toString(),
+            requestProduct.id,
             requestProduct.name,
             requestProduct.price,
             requestProduct.quantity,
@@ -18,5 +22,4 @@ class ProductService(private val productRepositoryPort: ProductRepositoryPort) :
         )
         return productRepositoryPort.insertProductRepository(productEntity)
     }
-
 }
