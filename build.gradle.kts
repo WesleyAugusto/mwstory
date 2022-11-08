@@ -68,6 +68,3 @@ micronaut {
         annotations("br.com.mwstory.*")
     }
 }
-
-
-

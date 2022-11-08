@@ -10,34 +10,54 @@ import java.util.*
 @Singleton
 class ProductRepository(private val mongoClient: MongoClient) : ProductRepositoryPort {
     override fun getOneProductsRepository(id: String): ProductEntity? {
-        return getColaction().find(Filters.eq("_id", id)).first()
+        return try {
+            getColaction().find(Filters.eq("_id", id)).first()
+        } catch (e: RuntimeException) {
+            throw RuntimeException("ERROR: Produto: $id FindOne Product Repository: ${e.message}")
+        }
     }
 
     override fun findAllProductsRepository(): List<ProductEntity> {
-        return getColaction().find().toList()
+        return try {
+            getColaction().find().toList()
+        } catch (e: RuntimeException) {
+            throw RuntimeException("ERROR: FindAll Product Repository: ${e.message}")
+        }
     }
 
     override fun insertProductRepository(productEntity: ProductEntity): ProductEntity {
-        productEntity.id = UUID.randomUUID().toString()
-        val result = getColaction().insertOne(productEntity)
-        return productEntity
+        return try {
+            productEntity.id = UUID.randomUUID().toString()
+            val result = getColaction().insertOne(productEntity)
+            productEntity
+        } catch (e: RuntimeException) {
+            throw RuntimeException("ERROR: Produto: ${productEntity.id} Insert Product Repository: ${e.message}")
+        }
     }
 
     override fun putProduct(requestProduct: Product): ProductEntity {
-        val productEntity = ProductEntity(
-            requestProduct.id,
-            requestProduct.name,
-            requestProduct.price,
-            requestProduct.quantity,
-            requestProduct.inventory,
-            requestProduct.category
-        )
-        getColaction().replaceOne(Filters.eq("_id", requestProduct.id), productEntity)
-        return productEntity
+        return try {
+            val productEntity = ProductEntity(
+                requestProduct.id,
+                requestProduct.name,
+                requestProduct.price,
+                requestProduct.quantity,
+                requestProduct.inventory,
+                requestProduct.category
+            )
+            getColaction().replaceOne(Filters.eq("_id", requestProduct.id), productEntity)
+            productEntity
+        } catch (e: RuntimeException) {
+            throw RuntimeException("ERROR: Produto: ${requestProduct.id} Update Product Repository: ${e.message}")
+        }
     }
 
     override fun deleteProduct(id: String): ProductEntity? {
-        return getColaction().findOneAndDelete(Filters.eq("_id", id))
+        return try {
+            getColaction().findOneAndDelete(Filters.eq("_id", id))
+        } catch (e: RuntimeException) {
+            throw RuntimeException("ERROR: Produto: $id Delete Product Repository: ${e.message}")
+        }
     }
 
     private fun getColaction() =
